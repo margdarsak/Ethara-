@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "build": "tsc",
+    "start": "prisma generate && prisma migrate deploy && node dist/index.js",
     "dev": "nodemon src/index.ts"
   },
   "dependencies": {
