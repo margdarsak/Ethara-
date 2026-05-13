@@ -24,23 +24,40 @@ app.use('/api/tasks', taskRoutes);
 const clientBuildPath = path.resolve(process.cwd(), 'client/dist');
 const indexPath = path.join(clientBuildPath, 'index.html');
 
+// Debug logs
 console.log('Working directory:', process.cwd());
 console.log('Client build path:', clientBuildPath);
+console.log('Index path:', indexPath);
 console.log('Index exists:', fs.existsSync(indexPath));
 
-// Serve frontend
+// Prevent favicon 502 crash
+app.get('/favicon.ico', (req, res) => {
+  return res.status(204).end();
+});
+
+// Serve frontend safely
 if (fs.existsSync(indexPath)) {
   app.use(express.static(clientBuildPath));
 
+  // SPA fallback for React Router / Vite
   app.get('*', (req, res) => {
-    res.sendFile(indexPath);
+    return res.sendFile(indexPath);
   });
 } else {
   app.get('*', (req, res) => {
-    res.status(500).send('Frontend build not found. Check Railway build process.');
+    return res.status(500).send(`
+Frontend build not found.
+
+Working Directory: ${process.cwd()}
+Client Build Path: ${clientBuildPath}
+Index Path: ${indexPath}
+
+Check Railway build process and ensure client/dist exists.
+    `);
   });
 }
 
+// Start server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
