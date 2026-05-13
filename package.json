@@ -6,10 +6,10 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "build": "cd client && npm install && npm run build && cd ../server && npm install && npx prisma generate && npx tsc",
-    "start": "cd server && npx prisma db push && node dist/index.js",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev",
-    "setup": "cd server && npm install && cd ../client && npm install"
+  "build": "cd client && npm install && npm run build && cd ../server && npm install && npm run build",
+  "start": "cd server && node dist/index.js"
+  "dev:server": "cd server && npm run dev",
+  "dev:client": "cd client && npm run dev",
+   "setup": "cd server && npm install && cd ../client && npm install"
   }
 }
