@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { FolderPlus, Users, Edit, Trash2 } from 'lucide-react';
+import Marquee from '../components/Marquee';
 
 interface Project {
   id: string;
@@ -144,7 +145,7 @@ const Projects = () => {
 
       <div className="dashboard-grid">
         {projects.map(project => (
-          <div key={project.id} className="card">
+          <div key={project.id} className="card sliding-border">
             <div className="flex-between mb-2">
               <h3 style={{ fontSize: '1.25rem', margin: 0 }}>{project.name}</h3>
               {user?.role === 'ADMIN' && (
@@ -266,6 +267,9 @@ const Projects = () => {
           </div>
         </div>
       )}
+      <div style={{ marginTop: '4rem' }}>
+        <Marquee />
+      </div>
     </div>
   );
 };

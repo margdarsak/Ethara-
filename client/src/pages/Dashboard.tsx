@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { CheckCircle2, Clock, CalendarDays, UserMinus } from 'lucide-react';
+import Marquee from '../components/Marquee';
 
 interface Task {
   id: string;
@@ -62,7 +63,7 @@ const Dashboard = () => {
       <h1 className="mb-4">Dashboard</h1>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-        <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
           <div style={{ background: 'rgba(255, 8, 68, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--accent)' }}>
             <CalendarDays size={28} />
           </div>
@@ -71,7 +72,7 @@ const Dashboard = () => {
             <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>{tasks.length}</p>
           </div>
         </div>
-        <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
           <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--warning)' }}>
             <Clock size={28} />
           </div>
@@ -80,7 +81,7 @@ const Dashboard = () => {
             <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>{pendingCount}</p>
           </div>
         </div>
-        <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
           <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--success)' }}>
             <CheckCircle2 size={28} />
           </div>
@@ -98,7 +99,7 @@ const Dashboard = () => {
         ) : (
           <div className="dashboard-grid">
             {tasks.map(task => (
-              <div key={task.id} className="card">
+              <div key={task.id} className="card sliding-border">
                 <div className="flex-between mb-2">
                   <span className="text-sm text-muted">{task.project.name}</span>
                   <select 
@@ -137,6 +138,9 @@ const Dashboard = () => {
             ))}
           </div>
         )}
+      </div>
+      <div style={{ marginTop: '4rem' }}>
+        <Marquee />
       </div>
     </div>
   );

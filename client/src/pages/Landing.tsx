@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Users, LayoutDashboard, ArrowRight } from 'lucide-react';
+import Marquee from '../components/Marquee';
 
 const Landing = () => {
   return (
@@ -43,21 +44,21 @@ const Landing = () => {
 
         {/* Features Preview */}
         <div style={{ display: 'flex', gap: '2rem', marginTop: '5rem', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '1000px' }}>
-          <div className="glass-panel" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
+          <div className="glass-panel sliding-border" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
             <div style={{ background: 'rgba(255, 8, 68, 0.1)', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '1.5rem' }}>
               <LayoutDashboard size={24} />
             </div>
             <h3 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Organized Projects</h3>
             <p className="text-muted" style={{ lineHeight: 1.6 }}>Create distinct projects and keep all related tasks neatly organized in one central location.</p>
           </div>
-          <div className="glass-panel" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
+          <div className="glass-panel sliding-border" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
             <div style={{ background: 'rgba(16, 185, 129, 0.1)', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--success)', marginBottom: '1.5rem' }}>
               <CheckCircle2 size={24} />
             </div>
             <h3 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Real-time Tracking</h3>
             <p className="text-muted" style={{ lineHeight: 1.6 }}>Monitor task statuses (Todo, In Progress, Done) and ensure your team hits every deadline.</p>
           </div>
-          <div className="glass-panel" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
+          <div className="glass-panel sliding-border" style={{ flex: '1 1 300px', padding: '2rem', textAlign: 'left' }}>
             <div style={{ background: 'rgba(245, 158, 11, 0.1)', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--warning)', marginBottom: '1.5rem' }}>
               <Users size={24} />
             </div>
@@ -66,7 +67,7 @@ const Landing = () => {
           </div>
         </div>
       </main>
-
+      <Marquee />
       {/* Footer */}
       <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
         <p>&copy; {new Date().getFullYear()} Team Task Manager. All rights reserved.</p>
