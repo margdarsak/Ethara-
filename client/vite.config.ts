@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+
+  // Dev server proxy
   server: {
     proxy: {
       '/api': {
@@ -11,5 +13,11 @@ export default defineConfig({
         secure: false,
       },
     },
+  },
+
+  // Production build output
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 });
