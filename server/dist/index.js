@@ -1,16 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth';
-import projectRoutes from './routes/projects';
-import taskRoutes from './routes/tasks';
+import authRoutes from './routes/auth.js'; // Ensure .js extension if using ES Modules
+import projectRoutes from './routes/projects.js';
+import taskRoutes from './routes/tasks.js';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT) || 5000;
+
+// FIX 1: Railway injects PORT automatically. Default to 8080 to match your logs.
+const PORT = process.env.PORT || 8080;
+
+// Handle ES Module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
@@ -20,44 +27,41 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 
-// Correct Railway production frontend path
-const clientBuildPath = path.resolve(process.cwd(), 'client/dist');
+// FIX 2: Better path resolution for Monorepos
+// If your server is in a 'server' folder, you may need to go up one level
+const clientBuildPath = path.resolve(__dirname, '../../client/dist');
 const indexPath = path.join(clientBuildPath, 'index.html');
 
-// Debug logs
-console.log('Working directory:', process.cwd());
-console.log('Client build path:', clientBuildPath);
-console.log('Index path:', indexPath);
-console.log('Index exists:', fs.existsSync(indexPath));
+// Logging for Railway Deploy Logs
+console.log(`Environment: ${process.env.NODE_ENV}`);
+console.log(`Listening on Port: ${PORT}`);
+console.log(`Checking for Frontend at: ${indexPath}`);
 
-// Prevent favicon 502 crash
-app.get('/favicon.ico', (req, res) => {
-  return res.status(204).end();
-});
+// Prevent favicon 502/404 noise
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// Health Check for Railway (helps prevent 502 during startup)
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
 // Serve frontend safely
 if (fs.existsSync(indexPath)) {
   app.use(express.static(clientBuildPath));
 
-  // SPA fallback for React Router / Vite
   app.get('*', (req, res) => {
-    return res.sendFile(indexPath);
+    res.sendFile(indexPath);
   });
 } else {
+  // If the build is missing, this helps you debug in the browser
   app.get('*', (req, res) => {
-    return res.status(500).send(`
-Frontend build not found.
-
-Working Directory: ${process.cwd()}
-Client Build Path: ${clientBuildPath}
-Index Path: ${indexPath}
-
-Check Railway build process and ensure client/dist exists.
-    `);
+    res.status(500).json({
+      error: "Frontend build not found",
+      checkedPath: indexPath,
+      suggestion: "Check if 'npm run build' ran for the client in your Railway pipeline."
+    });
   });
 }
 
-// Start server
+// FIX 3: Ensure the host is 0.0.0.0 for container accessibility
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server ready at http://0.0.0.0:${PORT}`);
 });
