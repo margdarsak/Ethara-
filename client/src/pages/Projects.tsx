@@ -29,6 +29,7 @@ const Projects = () => {
   const [taskProjectId, setTaskProjectId] = useState('');
   const [taskAssigneeId, setTaskAssigneeId] = useState('');
   const [taskDueDate, setTaskDueDate] = useState('');
+  const [taskError, setTaskError] = useState('');
 
   const { user } = useContext(AuthContext);
 
@@ -43,7 +44,7 @@ const Projects = () => {
     try {
       const res = await api.get('/auth/users');
       setUsers(res.data);
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -52,7 +53,7 @@ const Projects = () => {
     try {
       const res = await api.get('/projects');
       setProjects(res.data);
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -67,7 +68,7 @@ const Projects = () => {
       }
       closeProjectModal();
       fetchProjects();
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -89,7 +90,7 @@ const Projects = () => {
       setDescription(projectDetails.description || '');
       setMemberIds(projectDetails.members.map((m: any) => m.userId));
       setShowModal(true);
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -99,7 +100,7 @@ const Projects = () => {
     try {
       await api.delete(`/projects/${projectId}`);
       fetchProjects();
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -114,6 +115,7 @@ const Projects = () => {
         assigneeId: taskAssigneeId || null,
         dueDate: taskDueDate || null 
       });
+      console.log('Task created successfully');
       setShowTaskModal(false);
       setTaskTitle('');
       setTaskDesc('');
@@ -122,7 +124,7 @@ const Projects = () => {
       setTaskDueDate('');
       // Optionally fetch tasks if tasks are displayed here, but this is projects page.
       fetchProjects(); // to update task counts
-    } catch (err) {
+    } catch (err: any) { setTaskError(err.response?.data?.message || "Failed to create task");
       console.error(err);
     }
   };
@@ -133,7 +135,7 @@ const Projects = () => {
         <h1>Projects</h1>
         {user?.role === 'ADMIN' && (
           <div className="flex-responsive" style={{ display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary" onClick={() => setShowTaskModal(true)}>
+            <button className="btn btn-secondary" onClick={() => { setTaskError(''); setShowTaskModal(true); }}>
               New Task
             </button>
             <button className="btn btn-primary" onClick={() => { closeProjectModal(); setShowModal(true); }}>
@@ -150,6 +152,16 @@ const Projects = () => {
               <h3 style={{ fontSize: '1.25rem', margin: 0 }}>{project.name}</h3>
               {user?.role === 'ADMIN' && (
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem', color: 'var(--success)' }} 
+                    onClick={() => { 
+                      setTaskProjectId(project.id); 
+                      setTaskError(''); 
+                      setShowTaskModal(true); 
+                    }} 
+                    title="Add Task to Project"
+                  >
+                    <FolderPlus size={16} />
+                  </button>
                   <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleEditClick(project.id)} title="Edit Project">
                     <Edit size={16} />
                   </button>
@@ -228,6 +240,7 @@ const Projects = () => {
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <div className="glass-panel modal-panel" style={{ width: "100%", maxWidth: "500px" }}>
             <h2 className="mb-4">Create New Task</h2>
+            {taskError && <div style={{ color: 'var(--danger)', marginBottom: '1rem', background: 'rgba(255, 8, 68, 0.1)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', textAlign: 'center' }}>{taskError}</div>}
             <form onSubmit={handleCreateTask}>
               <div className="form-group">
                 <label className="form-label">Task Title</label>
