@@ -1,21 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth.js'; // Ensure .js extension if using ES Modules
-import projectRoutes from './routes/projects.js';
-import taskRoutes from './routes/tasks.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+
+// Import your routes - Ensure these filenames match exactly
+import authRoutes from './routes/auth.js';
+import projectRoutes from './routes/projects.js';
+import taskRoutes from './routes/tasks.js';
 
 dotenv.config();
 
 const app = express();
 
-// FIX 1: Railway injects PORT automatically. Default to 8080 to match your logs.
+// 1. DYNAMIC PORT: Railway injects this. 8080 is a safe fallback for Railway.
 const PORT = process.env.PORT || 8080;
 
-// Handle ES Module __dirname equivalent
+// 2. PATH RESOLUTION: Fixes __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -27,41 +29,32 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 
-// FIX 2: Better path resolution for Monorepos
-// If your server is in a 'server' folder, you may need to go up one level
+// 3. FRONTEND PATH: Adjusted to look outside the 'server' directory
+// This assumes structure: /root/server/index.js and /root/client/dist/
 const clientBuildPath = path.resolve(__dirname, '../../client/dist');
 const indexPath = path.join(clientBuildPath, 'index.html');
 
-// Logging for Railway Deploy Logs
-console.log(`Environment: ${process.env.NODE_ENV}`);
-console.log(`Listening on Port: ${PORT}`);
-console.log(`Checking for Frontend at: ${indexPath}`);
-
-// Prevent favicon 502/404 noise
-app.get('/favicon.ico', (req, res) => res.status(204).end());
-
-// Health Check for Railway (helps prevent 502 during startup)
+// 4. HEALTH CHECK: Helps Railway's proxy verify the container is ready
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-// Serve frontend safely
+// Prevent favicon noise
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// 5. STATIC FILES & SPA FALLBACK
 if (fs.existsSync(indexPath)) {
   app.use(express.static(clientBuildPath));
-
   app.get('*', (req, res) => {
     res.sendFile(indexPath);
   });
 } else {
-  // If the build is missing, this helps you debug in the browser
+  console.error('CRITICAL: Frontend build not found at', indexPath);
   app.get('*', (req, res) => {
-    res.status(500).json({
-      error: "Frontend build not found",
-      checkedPath: indexPath,
-      suggestion: "Check if 'npm run build' ran for the client in your Railway pipeline."
-    });
+    res.status(500).send(`Frontend build missing at: ${indexPath}`);
   });
 }
 
-// FIX 3: Ensure the host is 0.0.0.0 for container accessibility
+// 6. BIND TO 0.0.0.0: Mandatory for Railway/Docker networking
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server ready at http://0.0.0.0:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Internal directory: ${__dirname}`);
 });
