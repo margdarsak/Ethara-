@@ -32,7 +32,7 @@ Setup Instructions:
    - Run 'npm install'
    - Run 'npm run dev'
 
-3. Access the app at http://localhost:5173
+3. Access the app at https://etharataskmanager.up.railway.app/
 
 Default Admin (if seeded):
 --------------------------
