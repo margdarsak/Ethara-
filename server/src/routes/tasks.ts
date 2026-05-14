@@ -7,18 +7,30 @@ const router = Router();
 // Create Task (Admin Only)
 router.post('/', authenticate, requireAdmin, async (req: AuthRequest, res: Response): Promise<void> => {
   const { title, description, projectId, assigneeId, dueDate } = req.body;
+  
+  console.log('Attempting to create task:', { title, projectId, assigneeId });
+
   try {
+    if (!title || !projectId) {
+      res.status(400).json({ message: 'Title and Project are required' });
+      return;
+    }
+
     const task = await prisma.task.create({
       data: {
         title,
-        description,
+        description: description || '',
+        status: 'TODO',
         projectId,
-        assigneeId,
+        assigneeId: assigneeId || null,
         dueDate: dueDate ? new Date(dueDate) : null
       }
     });
+    
+    console.log('Task created successfully:', task.id);
     res.status(201).json(task);
   } catch (error) {
+    console.error('Task creation error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -29,23 +41,47 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response): Promise<v
     const userId = req.user!.userId;
     const role = req.user!.role;
 
+    console.log(`Fetching tasks for user: ${userId}, role: ${role}`);
+
     if (role === 'ADMIN') {
       const tasks = await prisma.task.findMany({
-        include: { assignee: { select: { name: true } }, project: { select: { name: true } } },
+        include: { 
+          assignee: { select: { name: true } }, 
+          project: { select: { name: true } } 
+        },
         orderBy: { dueDate: 'asc' }
       });
+      console.log(`Admin found ${tasks.length} total tasks`);
       res.json(tasks);
       return;
     }
 
-    // Members see their tasks
+    // Members see tasks assigned to them OR tasks in projects they are part of
+    // First, get all project IDs where user is a member
+    const userMemberships = await prisma.projectMember.findMany({
+      where: { userId },
+      select: { projectId: true }
+    });
+    const userProjectIds = userMemberships.map(m => m.projectId);
+
     const tasks = await prisma.task.findMany({
-      where: { assigneeId: userId },
-      include: { project: { select: { name: true } } },
+      where: {
+        OR: [
+          { assigneeId: userId },
+          { projectId: { in: userProjectIds } }
+        ]
+      },
+      include: { 
+        assignee: { select: { name: true } },
+        project: { select: { name: true } } 
+      },
       orderBy: { dueDate: 'asc' }
     });
+
+    console.log(`Member found ${tasks.length} tasks across ${userProjectIds.length} projects`);
     res.json(tasks);
   } catch (error) {
+    console.error('Fetch tasks error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
