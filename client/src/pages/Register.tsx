@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, CheckCircle2 } from 'lucide-react';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -32,6 +32,14 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="glass-panel">
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--accent), #ffb199)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 4px 12px rgba(255, 8, 68, 0.3)' }}>
+              <CheckCircle2 size={24} />
+            </div>
+            <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>EtharaTask</span>
+          </Link>
+        </div>
         <h1 className="auth-title text-gradient">Create Account</h1>
         <form onSubmit={handleSubmit}>
           {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import Landing from './pages/Landing';
 import Navbar from './components/Navbar';
+import Marquee from './components/Marquee';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useContext(AuthContext);

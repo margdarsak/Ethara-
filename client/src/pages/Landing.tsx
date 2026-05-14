@@ -1,22 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Users, LayoutDashboard, ArrowRight } from 'lucide-react';
-import Marquee from '../components/Marquee';
 
 const Landing = () => {
   return (
     <div className="landing-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', width: '100%' }}>
       {/* Navbar for Landing Page */}
-      <header style={{ padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', background: 'var(--bg-glass)', backdropFilter: 'blur(16px)' }}>
-        <div style={{ fontSize: '1.5rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--accent), #ffb199)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+      <header className="landing-header" style={{ padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', background: 'var(--bg-glass)', backdropFilter: 'blur(16px)', sticky: 'top', zIndex: 100 }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--accent), #ffb199)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
             <CheckCircle2 size={20} />
           </div>
-          Team Task Manager
+          <span className="logo-text">EtharaTask</span>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/login" className="btn btn-secondary">Login</Link>
-          <Link to="/register" className="btn btn-primary">Sign Up</Link>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link to="/login" className="btn btn-secondary" style={{ padding: '0.5rem 1rem' }}>Login</Link>
+          <Link to="/register" className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>Sign Up</Link>
         </div>
       </header>
 
@@ -67,7 +66,6 @@ const Landing = () => {
           </div>
         </div>
       </main>
-      <Marquee />
       {/* Footer */}
       <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
         <p>&copy; {new Date().getFullYear()} Team Task Manager. All rights reserved.</p>

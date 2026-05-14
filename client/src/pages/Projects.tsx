@@ -129,10 +129,10 @@ const Projects = () => {
 
   return (
     <div>
-      <div className="flex-between mb-4">
+      <div className="flex-between mb-4 flex-responsive">
         <h1>Projects</h1>
         {user?.role === 'ADMIN' && (
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div className="flex-responsive" style={{ display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary" onClick={() => setShowTaskModal(true)}>
               New Task
             </button>
@@ -180,7 +180,7 @@ const Projects = () => {
 
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '500px' }}>
+          <div className="glass-panel modal-panel" style={{ width: "100%", maxWidth: "500px" }}>
             <h2 className="mb-4">{editingProjectId ? 'Edit Project' : 'Create New Project'}</h2>
             <form onSubmit={handleSubmitProject}>
               <div className="form-group">
@@ -226,7 +226,7 @@ const Projects = () => {
 
       {showTaskModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '500px' }}>
+          <div className="glass-panel modal-panel" style={{ width: "100%", maxWidth: "500px" }}>
             <h2 className="mb-4">Create New Task</h2>
             <form onSubmit={handleCreateTask}>
               <div className="form-group">

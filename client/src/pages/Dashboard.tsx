@@ -62,28 +62,28 @@ const Dashboard = () => {
     <div>
       <h1 className="mb-4">Dashboard</h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
-          <div style={{ background: 'rgba(255, 8, 68, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--accent)' }}>
-            <CalendarDays size={28} />
+      <div className="stats-grid">
+        <div className="stat-card sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ background: 'rgba(255, 8, 68, 0.1)', padding: '0.75rem', borderRadius: '50%', color: 'var(--accent)', flexShrink: 0 }}>
+            <CalendarDays size={22} />
           </div>
           <div>
             <h3 className="text-muted text-sm">Total Tasks</h3>
             <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>{tasks.length}</p>
           </div>
         </div>
-        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
-          <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--warning)' }}>
-            <Clock size={28} />
+        <div className="stat-card sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '0.75rem', borderRadius: '50%', color: 'var(--warning)', flexShrink: 0 }}>
+            <Clock size={22} />
           </div>
           <div>
             <h3 className="text-muted text-sm">Pending</h3>
             <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>{pendingCount}</p>
           </div>
         </div>
-        <div className="glass-panel sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '1rem', borderRadius: '50%', color: 'var(--success)' }}>
-            <CheckCircle2 size={28} />
+        <div className="stat-card sliding-border" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.75rem', borderRadius: '50%', color: 'var(--success)', flexShrink: 0 }}>
+            <CheckCircle2 size={22} />
           </div>
           <div>
             <h3 className="text-muted text-sm">Completed</h3>

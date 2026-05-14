@@ -10,20 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "@prisma/client": "^7.8.0",
     "autoprefixer": "^10.5.0",
->>>>>>> ca1cbb3 (Updated animation section)
     "axios": "^1.16.0",
     "framer-motion": "^12.38.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^1.14.0",
-<<<<<<< HEAD
-=======
     "postcss": "^8.5.14",
     "prisma": "^7.8.0",
->>>>>>> ca1cbb3 (Updated animation section)
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.0",
